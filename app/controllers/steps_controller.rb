@@ -4,7 +4,6 @@ class StepsController < ApplicationController
   def index
     @steps = Step.all
     respond_with(@steps)
-    
   end
 
   def show
