@@ -1,5 +1,6 @@
 class CoursesController < ApplicationController
-
+  respond_to    :html, :json
+  
   def index
     @courses = Course.all
     respond_with(@courses)
@@ -12,7 +13,6 @@ class CoursesController < ApplicationController
   
   def new
     @course = Course.new
-    @course.enable_strict_validation = true
   end
 
   def create
