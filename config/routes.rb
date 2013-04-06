@@ -1,8 +1,11 @@
 Fintech::Application.routes.draw do
 
+  match 'courses/excel' => 'courses#excel'
+
   resources :courses
 
   root :to => 'courses#index'
+
   
   # The priority is based upon order of creation:
   # first created -> highest priority.
