@@ -28,6 +28,9 @@ body {
   margin: auto;
 }
 
+#editor {
+}
+
 #container {
   // text-align: center;
 }
@@ -154,7 +157,7 @@ body {
 }
 
 .lesson {
-  width: 33%;
+  width: 40%;
   float: right;
   height: 500px;
   border: solid;
@@ -171,12 +174,18 @@ body {
 }
 
 #container .sidebar, #container .reading, #container .lesson {
-  margin: 5px 18px;
+  margin: 0px 10px;
   padding: 10px;
+  height: 610px;
+}
+
+#container .lesson {
+  margin: 0px 0px 0px -10px;
 }
 
 #content {
  margin: 0 auto;
+ clear: both;
 }
 
 .navbar-inverse .navbar-inner {
@@ -205,10 +214,12 @@ body {
 }
 
 .footer {
+  background-color: white;
+  clear: both;
 }
 
 .reading {
-  width: 33%;
+  width: 30%;
   float: left;
   height: 500px;
   border: solid;

@@ -1,16 +1,9 @@
-<div id="myExcelDiv" style="width: 261px; height: 210px"></div>
+<div id="myExcelDiv" style="width: 500px; height: 610px"></div>
 <script type="text/javascript" src="http://r.office.microsoft.com/r/rlidExcelWLJS?v=1&kip=1"></script>
 <script type="text/javascript">
-  /*
-   * This code uses the Microsoft Office Excel Javascript object model to programmatically insert the
-   * Excel Web App into a div with id=myExcelDiv. The full API is documented at
-   * http://msdn.microsoft.com/en-US/library/hh315812.aspx. There you can find out how to programmatically get
-   * values from your Excel file and how to use the rest of the object model. 
-   */
-
-  // Use this file token to reference document.xlsx in Excel's APIs
-  var fileToken = "SD9A38AA61D3C6E28C!107/-7333924656031276404/t=0&s=0&v=!ABEATYmw6WIgbIs";
-
+  // Use this file token to reference Book1.xlsx in Excel's APIs
+    var fileToken = "SD3D1527833B258574!118/4401467655411041652/t=0&s=0&v=!ACyI1k_q_jwZqI4";
+    var ewa = null;
   // run the Excel load handler on page load
   if (window.attachEvent) {
     window.attachEvent("onload", loadEwaOnPageLoad);
@@ -20,14 +13,15 @@
 
   function loadEwaOnPageLoad() {
     var props = {
-      item: "'Sheet1'!A1:D9",
       uiOptions: {
-        showDownloadButton: false,
+                item: "'IS'!A1:C30",
+        showGridlines: true,
+        showRowColumnHeaders: true,
         showParametersTaskPane: false
       },
       interactivityOptions: {
         allowTypingAndFormulaEntry: true,
-        allowParameterModification: false,
+        allowParameterModification: true,
         allowSorting: false,
         allowFiltering: false,
         allowPivotTableInteractivity: false
@@ -37,112 +31,79 @@
     Ewa.EwaControl.loadEwaAsync(fileToken, "myExcelDiv", props, onEwaLoaded);
   }
 
-  function onEwaLoaded(asyncResult)
-    { 
-        if (asyncResult.getSucceeded())
-        {
-            // Use the AsyncResult.getEwaControl() method to get a reference to the EwaControl object
-            ewa = asyncResult.getEwaControl();
-            ewa.add_activeCellChanged(cellChanged);
+    function print_forward(){
+        print_to_textarea("\nGood Work!! You have advanced to step " + course.current_step);
+        print_to_textarea("\n" + course.course_json.steps[course.current_step].instructions)
+    }
+
+    function print_to_textarea(text){
+        var textArea = document.getElementById("editor");
+        // textArea.value += (text);
+        // textArea.value += (text);
+        $('#editor').append('<p>' + text + '</p>');
+    }
+
+    function print_boogie(){
+        print_to_textarea("\nIncorrect Answer!!!");
+    }
+            
+    function execute(){
+      var currentSheetName = ewa.getActiveWorkbook().getActiveSheet().getName();
+      var cell = course.course_json.steps[course.current_step].cell;
+        var commaIndex = cell.indexOf(",");
+        var row = parseInt(cell.substring(0, commaIndex));
+        var column = parseInt(cell.substring(commaIndex + 1))
+        var range = ewa.getActiveWorkbook().getRange(currentSheetName,row,column,row+1,column+1);
+        range.getValuesAsync(1, getRangeValues, null);
+    }
+
+    function getRangeValues(asyncResult){
+        if(asyncResult.getCode() == 0){
+            var cellValue = asyncResult.getReturnValue()[0][0];
+            var matched = match_answer(course, cellValue);
+            if(matched){
+                 forward_step(course);
+                 print_forward();
+            }else{
+                  print_boogie();
+            }
+        }else{
+            alert("Operation failed");
         }
-        else
-        {
+    }
+
+  function onEwaLoaded(result) {
+        if (result.getSucceeded()){
+            ewa = result.getEwaControl();
+        }
+        else{
             alert("Async operation failed!");
         }
-        // ...
+  }
+
+    function forward_step(course){
+        var new_step = course.current_step + 1;
+        var total_step = course.course_json.steps.length;
+        if(new_step < total_step){
+            course.current_step = new_step;
+            return true;
+        } 
+        return false;
     }
 
+   function match_answer(course, answer){
+       return (course.course_json.steps[course.current_step].answer == 
+               answer);
+   }
 
-    
-  function recalcAsyncCallback(asyncResult) {
-    // Get the value from asyncResult if the asynchronous operation was successful.
-      if (asyncResult.getCode() == 0)
-      {
-          // Display recalculate success message.
-          window.status = "Workbook recalculation successful!";
-      }
-      else 
-      {
-           alert("Operation failed with error message " + asyncResult.getDescription() + ".");
-      }    
-  }
-  var ewa = null;
- 
-  // Add event handler for onload event.
-  if (window.attachEvent) 
-  { 
-      window.attachEvent("onload", ewaOnPageLoad);    
-  } 
-  else 
-  { 
-      window.addEventListener("DOMContentLoaded", ewaOnPageLoad, false); 
-  }
-
-  // Add event handler for applicationReady event.
-  function ewaOnPageLoad() 
-  { 
-    Ewa.EwaControl.add_applicationReady(onApplicationReady); 
-  } 
-
-  function onApplicationReady()
-  {        
-      // Get a reference to the Excel Services Web Part.
-      ewa = Ewa.EwaControl.getInstances().getItem(0);                                     
-  }  
-
-  function refreshAllAsyncButton()
-  {
-      // Refresh all data connections.
-      ewa.getActiveWorkbook().refreshAllAsync(refreshAllAsyncCallBack);
-  }     
-
-  function refreshAllAsyncCallBack(asyncResult)
-  {
-      // Get the value from asyncResult if the asynchronous operation was successful.
-      if (asyncResult.getCode() == 0)
-      {
-          // Display refresh success message.
-          window.status = "Data connection refresh successful!";
-      }
-      else 
-      {
-           alert("Operation failed with error message " + asyncResult.getDescription() + ".");
-      }    
-  } 
-
-  function execute() {
-    //Note: In SharePoint, it may also make sense to pair this call with
-    //ewa.getActiveWorkbook().refreshAllAsync(refreshCallback);
-    
-    //Recalculate the workbook
-    // ewa.getActiveWorkbook().recalcAsync(recalcAsyncCallback);
-    ewa.getActiveWorkbook().getActiveCell().getValuesAsync(1,getRangeValues,null);
-
-  }
-  function getRangeValues(asyncResult)
-  {
-    // Get the value from asyncResult if the asynchronous operation was successful.
-    if (asyncResult.getCode() == 0)
-    {
-        // Get the value in active cell (located at row 0, column 0 of the
-        // range which consists of a single cell (the "active cell")).
-        alert("Result: " + asyncResult.getReturnValue()[0][0]);
+    var course = {
+        course_json : "",
+        current_step : 0
     }
-    else 
-    {
-          alert("Operation failed with error message " + asyncResult.getDescription() + ".");
-    }    
-  }
-  alerting = function () {
-    ewa.getActiveWorkbook().getActiveCell().getValuesAsync(1,getRangeValues,null);
-    // alert("hello");
-    // alert(ewa.getActiveWorkbook().getActiveCell().getValuesAsync(1,getRangeValues,null));
-    // alert(ewa.getActiveWorkbook().getActiveCell().getAddressA1());
-    alert(ewa.getActiveWorkbook().getActiveCell().getAddressA1());
-    
-    // alert(execute());
-    // alert(execute());
 
-    // preventDefault();
-}
+    course.course_json = {"created_at":"2013-04-07T02:04:31Z","id":7,"title":"q","updated_at":"2013-04-07T02:04:31Z","steps":[{"cell":"6,2","answer":1,"course_id":7,"created_at":"2013-04-07T02:04:31Z","description":"q1","id":7,"instructions":"FirstInstruction","updated_at":"2013-04-07T02:04:31Z"},{"cell":"7,2","answer":2,"course_id":7,"created_at":"2013-04-07T02:04:31Z","description":"q2","id":8,"instructions":"SecondInstruction","updated_at":"2013-04-07T02:04:31Z"}]}
+    function onload_func(){
+        print_to_textarea("\n" + course.course_json.steps[course.current_step].instructions);
+    }
+    window.onload = onload_func;
 </script>
