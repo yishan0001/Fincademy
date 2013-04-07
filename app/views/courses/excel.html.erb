@@ -37,11 +37,24 @@
     }
 
     function print_to_textarea(text){
-        var textArea = document.getElementById("editor");
+        // var textArea = document.getElementById("editor");
+        // // textArea.value += (text);
+        // // textArea.value += (text);
+        // $('#editor').append('<p>' + text + '</p>');
+
+        // var textArea = $("#myModal .modal-body");
         // textArea.value += (text);
         // textArea.value += (text);
-        $('#editor').append('<p>' + text + '</p>');
+        // if ($("#myModal .modal-body").text() == '')
+        $("#myModal .modal-body").text(text);
+        // else
+        // $("#myModal .modal-body").next().text('');
     }
+
+      $("#answer_button").click(function(e) {
+        alert("You clicked me!");
+        e.preventDefault();
+      });
 
     function print_boogie(){
         print_to_textarea("\nIncorrect Answer!!!");
