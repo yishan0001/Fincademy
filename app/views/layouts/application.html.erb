@@ -8,19 +8,13 @@
   <title>FinanceAcademy</title>
   <meta http-equiv="X-UA-Compatible" content="IE=9">
 
-  <!-- Load the Realtime libraries. -->
-  <script type="text/javascript"
-          src="https://apis.google.com/js/api.js"></script>
-
-  <!-- Load the utility library. -->
-  <!-- <%= javascript_include_tag "realtime-client-utils" %> -->
-
 </head>
-<body onLoad='startRealtime()'>
-<div id="container" class="container-fluid">
+<body>
   <div class="header">
     <%= render 'layouts/header' %>
   </div>
+<div id="container" class="container-fluid">
+  
 
   <div id="content">
     <div class="sidebar">
@@ -37,9 +31,7 @@
 
   </div>
 
-  <footer class="footer">
-      <%= render 'layouts/footer' %>
-  </footer>
+
 
 </body>
 </html>

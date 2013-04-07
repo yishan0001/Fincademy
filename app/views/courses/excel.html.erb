@@ -35,15 +35,44 @@
         print_to_textarea("\n" + course.course_json.steps[course.current_step].instructions)
     }
 
+<<<<<<< HEAD
+// <<<<<<< HEAD
+    // function print_to_textarea(text){
+        // var textArea = document.getElementById("editor");
+        // // textArea.value += (text);
+        // // textArea.value += (text);
+        // $('#editor').append('<p>' + text + '</p>');
+
+        // var textArea = $("#myModal .modal-body");
+        // textArea.value += (text);
+        // textArea.value += (text);
+        // if ($("#myModal .modal-body").text() == '')
+        // $("#myModal .modal-body").text(text);
+        // else
+        // $("#myModal .modal-body").next().text('');
+// =======
+    // function print_to_textarea(text, class){
+        // $('#editor').append('<p class = ' + class + '>' + text + '</p>');
+// >>>>>>> d9dfa725fc1284bb81f7f3163251ea324db75619
+// =======
     function print_to_textarea(text){
         $('#editor').append('<p class = ' + class + '>' + text + '</p>');
+// >>>>>>> 8d4d42b3f2973fb4b671e701ed15932dfc921cf4
     }
+
+      // $("#answer_button").click(function(e) {
+      //   alert("You clicked me!");
+      //   e.preventDefault();
+      // });
+
+      $('.progress').tooltip('show');
 
     function print_boogie(){
         print_to_textarea("\nIncorrect Answer!!!");
     }
             
     function execute(){
+      $("#myModal .modal-body").text("text");
       var currentSheetName = ewa.getActiveWorkbook().getActiveSheet().getName();
       var cell = course.course_json.steps[course.current_step].cell_location;
         var commaIndex = cell.indexOf(",");
