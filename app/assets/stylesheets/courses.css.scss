@@ -41,9 +41,10 @@ body {
   // border-left: solid;
 }
 
-#container {
-  // text-align: center;
-}
+// #container .container-fluid {
+//   // text-align: center;
+//   margin-bottom: 10px;
+// }
 
 #wrap {
   margin: 0 auto;
@@ -97,10 +98,14 @@ body {
   opacity: 1;
 }
 
+.home_page {
+  font-size: 2em;
+}
+
 .submit_btn {
-  position: relative;
-  bottom: -540px;
-  right: -195px;
+  position: absolute;
+  bottom: 100px;
+  left: 220px;
 }
 
 .submit_btn .btn {
@@ -152,7 +157,7 @@ body {
 
 .header {
   // display: block;
-  height: 100px;
+  height: 75px;
 }
 
 .header .row {
@@ -197,7 +202,7 @@ body {
   float: left;
   height: 500px;
   border: solid;
-  border-color: #1ABC9C;
+  border-color: #34495E;
   background-color: #1ABC9C;
 }
 
@@ -222,7 +227,7 @@ body {
   margin: 0px 10px;
   padding: 10px;
   height: 610px;
-  
+
   // border: 0px solid #ddd;
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
@@ -329,4 +334,9 @@ textarea {
   height: 40px;
   width: 350px;
   margin-top: 3px;
+}
+
+#myExcelDiv {
+  text-align: center;
+  margin: auto;
 }

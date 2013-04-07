@@ -1,4 +1,4 @@
-<div id="myExcelDiv" style="width: 500px; height: 610px"></div>
+<div id="myExcelDiv" style="width: 505x; height: 610px"></div>
 <script type="text/javascript" src="http://r.office.microsoft.com/r/rlidExcelWLJS?v=1&kip=1"></script>
 <script type="text/javascript">
     var fileToken = "SD3D1527833B258574!118/4401467655411041652/t=0&s=0&v=!ACyI1k_q_jwZqI4";
@@ -31,55 +31,33 @@
   }
 
     function print_forward(){
-        print_to_textarea("\nGood Work!! You have advanced to step " + course.current_step);
+        var current_step = course.current_step + 1;
+        // print_to_textarea("\nGood Work!! You have advanced to step " + current_step);
         print_to_textarea("\n" + course.course_json.steps[course.current_step].instructions)
     }
 
-// <<<<<<< HEAD
-// <<<<<<< HEAD
-    // function print_to_textarea(text){
-        // var textArea = document.getElementById("editor");
-        // // textArea.value += (text);
-        // // textArea.value += (text);
-        // $('#editor').append('<p>' + text + '</p>');
-
-        // var textArea = $("#myModal .modal-body");
-        // textArea.value += (text);
-        // textArea.value += (text);
-        // if ($("#myModal .modal-body").text() == '')
-        // $("#myModal .modal-body").text(text);
-        // else
-        // $("#myModal .modal-body").next().text('');
-// =======
-    // function print_to_textarea(text, class){
-        // $('#editor').append('<p class = ' + class + '>' + text + '</p>');
-// >>>>>>> d9dfa725fc1284bb81f7f3163251ea324db75619
-// =======
     function print_to_textarea(text){
         $('#editor').append('<p>' + text + '</p>');
-// >>>>>>> 8d4d42b3f2973fb4b671e701ed15932dfc921cf4
+    }
+    
+    function print_to_reading(url){
+      $("#reading_area").append('<img src="' + url + '" />');
     }
 
-      // $("#answer_button").click(function(e) {
-      //   alert("You clicked me!");
-      //   e.preventDefault();
-      // });
-
-      $('.progress').tooltip('show');
-
     function print_boogie(){
-        print_to_textarea("\nIncorrect Answer!!!");
+      $("#myModal .modal-body").text("Almost! Give it another go!");
+        // print_to_textarea("\nIncorrect Answer!!!");
     }
             
     function execute(){
-      $("#myModal .modal-body").text("text");
+      //$("#myModal .modal-body").text("text");
       var currentSheetName = ewa.getActiveWorkbook().getActiveSheet().getName();
       var cell = course.course_json.steps[course.current_step].cell_location;
-        var commaIndex = cell.indexOf(",");
-        var row = parseInt(cell.substring(0, commaIndex));
-        var column = parseInt(cell.substring(commaIndex + 1))
-        var range = ewa.getActiveWorkbook().getRange(currentSheetName,row,column,row+1,column+1);
-        range.getValuesAsync(1, getRangeValues, null);
+      var commaIndex = cell.indexOf(",");
+      var row = parseInt(cell.substring(0, commaIndex));
+      var column = parseInt(cell.substring(commaIndex + 1))
+      var range = ewa.getActiveWorkbook().getRange(currentSheetName,row,column,row+1,column+1);
+      range.getValuesAsync(1, getRangeValues, null);
     }
 
     function change_image(){
@@ -94,16 +72,22 @@
             var cellValue = asyncResult.getReturnValue()[0][0];
             var matched = match_answer(course, cellValue);
             if(matched){
-                 var current_step = course.current_step;
-                 forward_step(course);
-                 if(course.current_step = current_step){
-                     //TODO end of the tutorial
-                 }else{
-                     print_forward();
-                     change_image();
-                 }
+                $("#myModal .modal-body").text("Congrats! You're doing great!");
+                $('#editor').text('');
+                $("#reading_area").text('');
+                var current_step = course.current_step;
+                forward_step(course);
+                $("#reading_area").text();
+                print_to_reading(course.course_json.steps[course.current_step].image_location);
+                if(current_step == course.current_step){
+                  $("#myModal .modal-body").text("Congrats! You're done!");
+                }else{
+                //forward_step(course);
+                print_forward();
+                change_image();
+              }
             }else{
-                  print_boogie();
+                print_boogie();
             }
         }else{
             alert("Operation failed");
@@ -130,8 +114,17 @@
     }
 
    function match_answer(course, answer){
+      // console.log(answer);
+      // console.log(answer.length());
+      // console.log(course.course_json.steps[course.current_step].answer);
+      // console.log(course.course_json.steps[course.current_step].answer.length());
+      
+      // console.log(answer);
+      // alert(answer);
+      // console.log(course.course_json.steps[course.current_step].answer);
+      // alert(course.course_json.steps[course.current_step].answer);
        return (course.course_json.steps[course.current_step].answer == 
-               answer);
+               answer.trim());
    }
 
     var course = {
@@ -139,14 +132,15 @@
         current_step : 0
     }
 
-    $(document).ready(function(){
-            print_to_textarea("\n" + course.course_json.steps[course.current_step].instructions);
-            $.ajax({
-                url: url, //TODO
-                success: function(data){course.course_json = data;}
-            });                      
-        });
+    function onload_func(){
+      course.course_json = {"created_at":"2013-04-07T02:04:31Z","id":7,"title":"q","updated_at":"2013-04-07T02:04:31Z","steps":[{"answer":1,"cell_location":"6,2","course_id":7,"created_at":"2013-04-07T02:04:31Z","description":"q1","id":7,"image_location":"https://dl.dropbox.com/u/174558/images/image_01.png","instructions": "<h3>Welcome to Finacademy - Equity Track!</h3><br />Financial modeling is the task of building an abstract representation (a model) of a financial decision-making situation. This is a mathematical model designed to represent (a simplified version of) the performance of a financial asset or portfolio of a business, project, or any other investment. <br /><hr />In Equity Track, you will learn how to build a financial model for a public company's entire financial statement from scratch, and then make projections for its stock price. <br /><hr />To the right you will see the first page of Facebook's 10K(Annual Report). We will be sifting through Facebook's public report to create a financial model that projects Facebook future earnings. <br /><br />Good Luck! <br /><br /> Direction: <br />1) Type '1' into cell C7 the Excel Sheet and hit Submit","updated_at":"2013-04-07T02:04:31Z"},{"answer":"$5,089.0","cell_location":"8,2","course_id":7,"created_at":"2013-04-07T02:04:31Z","description":"q2","id":8,"image_location":"https://dl.dropbox.com/u/174558/images/image_02.png","instructions":"To start, we are going to enter Facebook's Full Year Revenues for 2012.<br /><br />In business, revenue or turnover is income that a company receives from its normal business activities, usually from the sale of goods and services to customers. For Facebook, revenue is primarily earned on advertising.<br /><br />Instructions:<br />1) Find the Revenue figure for 2012.<br />2) Type the Revenue figure into the appropriate excel page on the right.<br /><br />Next time you go on to Facebook you can know exactly how much revenue they earn from advertising for the full year.","updated_at":"2013-04-07T02:04:31Z"},{"answer":"$1,364.0","cell_location":"9,2","course_id":7,"created_at":"2013-04-07T02:04:31Z","description":"q3","id":9,"image_location":"https://dl.dropbox.com/u/174558/images/image_02.png","instructions":"Cost of Revenue is the total cost of delivering a product or service. Its information is found in a company's income statement, and is designed to represent the direct costs associated with the goods and services the company provides. Indirect costs, such as salaries, are not included.<br /><br />Instructions:<br />1) Take Facebook's Cost of Revenue in 2012 and put it into the spreadsheet below Revenues<br />2) Submit the information to move on."},{"answer":"3,725.0","cell_location":"10,2","course_id":7,"created_at":"2013-04-07T02:04:31Z","description":"q4","id":10,"image_location":null,"instructions":"Gross profit or sales profit is the difference between revenue and the cost of making a product or providing a service, before deducting overhead, payroll, taxation, and interest payments. Note that this is different from operating profit (earnings before interest and taxes.<br /><br />Instruction:<br />Subtract Revenue minus Costs using the formula to the right."},{"answer":"1,200.0","cell_location":"23,2","course_id":7,"created_at":"2013-04-07T02:04:31Z","description":"q5","id":11,"image_location":"https://dl.dropbox.com/u/174558/images/image_05.png","instructions":"Projecting revenues and other financial measures is an important part of financial modeling, which is often considered an art more than a science.<br /><br />To the right you can see Facebook's monthly user growth rates and mobile user base histroy. The projected future number of users is up for you to decide. Use the graph to the right to estimate what you believe Facebook's future total number of users will be.<br /><br />Instruction:<br />1) Enter in a number greater than 1 billion and less than 2 billion on what you think facebooks number of users will be."}]};
+      print_to_textarea("\n" + course.course_json.steps[course.current_step].instructions);
+      print_to_reading(course.course_json.steps[course.current_step].image_location);
+      console.log(course.course_json.steps[course.current_step].image_location);
+      console.log(course.course_json.steps[course.current_step].answer);
 
-    
-                      
+    }
+
+    window.onload = onload_func;
+                    
 </script>
