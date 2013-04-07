@@ -1,4 +1,12 @@
 <div id="myExcelDiv" style="width: 500px; height: 610px"></div>
+<style>
+  .error{
+      color : red;
+  }
+  .success{
+      color : green;
+  }
+</style>
 <script type="text/javascript" src="http://r.office.microsoft.com/r/rlidExcelWLJS?v=1&kip=1"></script>
 <script type="text/javascript">
   // Use this file token to reference Book1.xlsx in Excel's APIs
@@ -32,24 +40,21 @@
   }
 
     function print_forward(){
-        print_to_textarea("\nGood Work!! You have advanced to step " + course.current_step);
+        print_to_textarea("\nGood Work!! You have advanced to step " + course.current_step, "success");
         print_to_textarea("\n" + course.course_json.steps[course.current_step].instructions)
     }
 
-    function print_to_textarea(text){
-        var textArea = document.getElementById("editor");
-        // textArea.value += (text);
-        // textArea.value += (text);
-        $('#editor').append('<p>' + text + '</p>');
+    function print_to_textarea(text, class){
+        $('#editor').append('<p class = ' + class + '>' + text + '</p>');
     }
 
     function print_boogie(){
-        print_to_textarea("\nIncorrect Answer!!!");
+        print_to_textarea("\nIncorrect Answer!!!", "error");
     }
             
     function execute(){
       var currentSheetName = ewa.getActiveWorkbook().getActiveSheet().getName();
-      var cell = course.course_json.steps[course.current_step].cell;
+      var cell = course.course_json.steps[course.current_step].cell_location;
         var commaIndex = cell.indexOf(",");
         var row = parseInt(cell.substring(0, commaIndex));
         var column = parseInt(cell.substring(commaIndex + 1))
@@ -101,9 +106,14 @@
         current_step : 0
     }
 
-    course.course_json = {"created_at":"2013-04-07T02:04:31Z","id":7,"title":"q","updated_at":"2013-04-07T02:04:31Z","steps":[{"cell":"6,2","answer":1,"course_id":7,"created_at":"2013-04-07T02:04:31Z","description":"q1","id":7,"instructions":"FirstInstruction","updated_at":"2013-04-07T02:04:31Z"},{"cell":"7,2","answer":2,"course_id":7,"created_at":"2013-04-07T02:04:31Z","description":"q2","id":8,"instructions":"SecondInstruction","updated_at":"2013-04-07T02:04:31Z"}]}
-    function onload_func(){
-        print_to_textarea("\n" + course.course_json.steps[course.current_step].instructions);
-    }
-    window.onload = onload_func;
+    $(document).ready(function(){
+            print_to_textarea("\n" + course.course_json.steps[course.current_step].instructions, "success");
+            $.ajax({
+                url: url,
+                success: function(data){course.course_json = data;}
+            });                      
+        });
+
+    
+                      
 </script>
