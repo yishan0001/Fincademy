@@ -62,13 +62,25 @@
         range.getValuesAsync(1, getRangeValues, null);
     }
 
+    function change_image(){
+        //get image 
+        //get div
+        //load image
+   }
+
     function getRangeValues(asyncResult){
         if(asyncResult.getCode() == 0){
             var cellValue = asyncResult.getReturnValue()[0][0];
             var matched = match_answer(course, cellValue);
             if(matched){
+                 var current_step = course.current_step;
                  forward_step(course);
-                 print_forward();
+                 if(course.current_step = current_step){
+                     //TODO end of the tutorial
+                 }else{
+                     print_forward();
+                     change_image();
+                 }
             }else{
                   print_boogie();
             }
