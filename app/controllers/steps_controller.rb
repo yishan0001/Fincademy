@@ -7,44 +7,49 @@ class StepsController < ApplicationController
   end
 
   def show
+    # @course = Course.find(params[:course_id])
+    # @step = @course.steps.build
     @step = get_step(params[:id]) 
     respond_with(@step)
   end
   
   def new
-    @step = Step.new
+    # @step = Step.new(@course)
+    # @course = Course.find(params[:course_id])
+    # @step = @course.steps.build
   end
 
   def create
-    @step = Step.new(params[:course])
-    if @step.save
-      redirect_to(@step, :notice => 'Step added successfully!')
-    else
-      render :new
-    end
+    # @step = Step.new(params[:course])
+    # @course = Course.find(params[:course_id])
+    # @step = @course.step.build(params[:step])
+    # if @step.save
+      # redirect_to(@step, :notice => 'Step added successfully!')
+    # else
+      # render :new
+    # end
   end
   
   def edit
-    @step = get_course(params[:id]) 
+    # @step = get_course(params[:id]) 
   end
   
   def update
-    @step = get_course(params[:id]) 
-    if @step.update_attributes(params[:step])
-      redirect_to(@step, :notice => 'Step updated')
-    else
-      render :edit
-    end
+    # @step = get_course(params[:id]) 
+    # if @step.update_attributes(params[:step])
+      # redirect_to(@step, :notice => 'Step updated')
+    # else
+      # render :edit
+    # end
   end
 
   def destroy
-    @step = get_step(params[:id])
-    if @step.destroy
-      redirect_to steps_path
-    end
+    # @step = get_step(params[:id])
+    # if @step.destroy
+      # redirect_to new_course_path
+    # end
   end
 
-  private
 
   def get_step(step_id)
     Step.find(step_id)
