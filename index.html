@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<script type="text/javascript" src="http://r.office.microsoft.com/r/rlidExcelWLJS?v=1&kip=1"></script>
+<script type="text/javascript" src="js/course.js"></script>
+<script type="text/javascript">
+	// Use this file token to reference Book1.xlsx in Excel's APIs
+    var fileToken = "SD3D1527833B258574!114/4401467655411041652/t=0&s=0&v=!ANPvLLq0GFf3XlY";
+    var ewa = null;
+	// run the Excel load handler on page load
+	if (window.attachEvent) {
+		window.attachEvent("onload", loadEwaOnPageLoad);
+	} else {
+		window.addEventListener("DOMContentLoaded", loadEwaOnPageLoad, false);
+	}
+
+	function loadEwaOnPageLoad() {
+		var props = {
+			uiOptions: {
+                item: "'IS'!A1:C30",
+				showGridlines: true,
+				showRowColumnHeaders: true,
+				showParametersTaskPane: false
+			},
+			interactivityOptions: {
+				allowTypingAndFormulaEntry: true,
+				allowParameterModification: true,
+				allowSorting: false,
+				allowFiltering: false,
+				allowPivotTableInteractivity: false
+			}
+		};
+
+		Ewa.EwaControl.loadEwaAsync(fileToken, "excel", props, onEwaLoaded);
+	}
+
+    function print_forward(){
+        print_to_textarea("\nGood Work!! You have advanced to step " + course.current_step);
+        print_to_textarea("\n" + course.course_json.steps[course.current_step].instructions)
+    }
+
+    function print_to_textarea(text){
+        var textArea = document.getElementById("editor");
+        textArea.value += (text);
+    }
+
+    function print_boogie(){
+        print_to_textarea("\nIncorrect Answer!!!");
+    }
+            
+    function execute(){
+	    var currentSheetName = ewa.getActiveWorkbook().getActiveSheet().getName();
+	    var cell = course.course_json.steps[course.current_step].cell;
+        var commaIndex = cell.indexOf(",");
+        var row = parseInt(cell.substring(0, commaIndex));
+        var column = parseInt(cell.substring(commaIndex + 1))
+        var range = ewa.getActiveWorkbook().getRange(currentSheetName,row,column,row+1,column+1);
+        range.getValuesAsync(1, getRangeValues, null);
+    }
+
+    function getRangeValues(asyncResult){
+        if(asyncResult.getCode() == 0){
+            var cellValue = asyncResult.getReturnValue()[0][0];
+            var matched = match_answer(course, cellValue);
+            if(matched){
+                 forward_step(course);
+                 print_forward();
+            }else{
+                  print_boogie();
+            }
+        }else{
+            alert("Operation failed");
+        }
+    }
+
+	function onEwaLoaded(result) {
+        if (result.getSucceeded()){
+            ewa = result.getEwaControl();
+        }
+        else{
+            alert("Async operation failed!");
+        }
+	}
+
+    function forward_step(course){
+        var new_step = course.current_step + 1;
+        var total_step = course.course_json.steps.length;
+        if(new_step < total_step){
+            course.current_step = new_step;
+            return true;
+        } 
+        return false;
+    }
+
+   function match_answer(course, answer){
+       return (course.course_json.steps[course.current_step].answer == 
+               answer);
+   }
+
+    var course = {
+        course_json : "",
+        current_step : 0
+    }
+
+    course.course_json = {"created_at":"2013-04-07T02:04:31Z","id":7,"title":"q","updated_at":"2013-04-07T02:04:31Z","steps":[{"cell":"6,2","answer":1,"course_id":7,"created_at":"2013-04-07T02:04:31Z","description":"q1","id":7,"instructions":"FirstInstruction","updated_at":"2013-04-07T02:04:31Z"},{"cell":"7,2","answer":2,"course_id":7,"created_at":"2013-04-07T02:04:31Z","description":"q2","id":8,"instructions":"SecondInstruction","updated_at":"2013-04-07T02:04:31Z"}]}
+    function onload_func(){
+        print_to_textarea("\n" + course.course_json.steps[course.current_step].instructions);
+    }
+    window.onload = onload_func;
+</script>
+<table>
+  <tbody>
+    <tr>
+      <td>
+        <textarea id = "editor"  
+                  style= "background: palegreen; font-size: 12px; color: #9b2220" 
+                  readonly="true" rows="30" cols="30">
+          Welcome!!!
+        </textarea> 
+      </td>
+      <td id = "content">
+      </td>
+      <td>
+        <div id = "excel" style="width: 600px; height: 610px"></div>
+        <div id = "formula">
+          <input name ="Submit" type="submit" value = "Submit" onClick="execute()"></input>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>
