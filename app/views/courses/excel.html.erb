@@ -1,15 +1,6 @@
 <div id="myExcelDiv" style="width: 500px; height: 610px"></div>
-<style>
-  .error{
-      color : red;
-  }
-  .success{
-      color : green;
-  }
-</style>
 <script type="text/javascript" src="http://r.office.microsoft.com/r/rlidExcelWLJS?v=1&kip=1"></script>
 <script type="text/javascript">
-  // Use this file token to reference Book1.xlsx in Excel's APIs
     var fileToken = "SD3D1527833B258574!118/4401467655411041652/t=0&s=0&v=!ACyI1k_q_jwZqI4";
     var ewa = null;
   // run the Excel load handler on page load
@@ -40,16 +31,16 @@
   }
 
     function print_forward(){
-        print_to_textarea("\nGood Work!! You have advanced to step " + course.current_step, "success");
+        print_to_textarea("\nGood Work!! You have advanced to step " + course.current_step);
         print_to_textarea("\n" + course.course_json.steps[course.current_step].instructions)
     }
 
-    function print_to_textarea(text, class){
+    function print_to_textarea(text){
         $('#editor').append('<p class = ' + class + '>' + text + '</p>');
     }
 
     function print_boogie(){
-        print_to_textarea("\nIncorrect Answer!!!", "error");
+        print_to_textarea("\nIncorrect Answer!!!");
     }
             
     function execute(){
@@ -63,6 +54,7 @@
     }
 
     function change_image(){
+        //TODO
         //get image 
         //get div
         //load image
@@ -119,9 +111,9 @@
     }
 
     $(document).ready(function(){
-            print_to_textarea("\n" + course.course_json.steps[course.current_step].instructions, "success");
+            print_to_textarea("\n" + course.course_json.steps[course.current_step].instructions);
             $.ajax({
-                url: url,
+                url: url, //TODO
                 success: function(data){course.course_json = data;}
             });                      
         });
