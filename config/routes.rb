@@ -6,6 +6,6 @@ Fintech::Application.routes.draw do
   match '/tracks' => 'static_pages#tracks'
 
   resources :courses
-  root :to => 'courses#index'
+  root :to => 'static_pages#home'
 
 end
