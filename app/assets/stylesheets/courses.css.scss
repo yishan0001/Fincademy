@@ -23,8 +23,13 @@ display:block;
 }
 
 body {
+  // width: 1300px;
   width: 100%;
   margin: auto;
+}
+
+#container {
+  // text-align: center;
 }
 
 #wrap {
@@ -118,8 +123,12 @@ body {
 }
 
 .header {
-  display: block;
+  // display: block;
   height: 100px;
+}
+
+.header .row {
+  margin: 0 auto;
 }
 
 .logo {
@@ -129,6 +138,7 @@ body {
 .leftnav {
   width: 30%;
   float: left;
+  margin: left;
 }
 
 .rightnav {
@@ -137,17 +147,21 @@ body {
 }
 
 .sidebar {
-  width: 20%; 
+  width: 20%;
   float: left;
+  height: 500px;
+  border: solid;
 }
 
 .lesson {
   width: 33%;
-  float: left;
+  float: right;
+  height: 500px;
+  border: solid;
 }
 
 .container {
-  border: 1px solid #ddd;
+  border: 0px solid #ddd;
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
   border-radius: 6px;
@@ -156,13 +170,52 @@ body {
   box-shadow: 0 1px 2px rgba(0,0,0,.075);
 }
 
+#container .sidebar, #container .reading, #container .lesson {
+  margin: 5px 18px;
+  padding: 10px;
+}
+
+#content {
+ margin: 0 auto;
+}
+
+.navbar-inverse .navbar-inner {
+  border-radius: 0px;
+}
+
+.floatright {
+  float: right;
+}
+
+.floatleft {
+  float: left;
+  clear: left;
+}
+
+.span12 #main {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.progress {
+  width: 100px;
+  height: 100px;
+  margin: 18px 0px 18px 30px;
+  border-left: solid;
+}
+
 .footer {
 }
 
 .reading {
   width: 33%;
   float: left;
-  
+  height: 500px;
+  border: solid;
+}
+
+#container .sidebar, #container .reading, #container .lesson {
+  // margin-right: 10px;
 }
 
 .article {
